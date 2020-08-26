@@ -11,16 +11,16 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <PersistGate persistor={persistor}>
-          <App />
-        </PersistGate>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<Provider store={store}>
+			<BrowserRouter>
+				<PersistGate persistor={persistor}>
+					<App />
+				</PersistGate>
+			</BrowserRouter>
+		</Provider>
+	</React.StrictMode>,
+	document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

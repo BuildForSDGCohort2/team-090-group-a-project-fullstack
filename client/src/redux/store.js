@@ -7,16 +7,17 @@ import rootReducers from './root-reducer';
 
 import rootSaga from './root-saga';
 
-const sagaMiddleWare = createSagaMiddleware()
+const sagaMiddleWare = createSagaMiddleware();
 const middlewares = [sagaMiddleWare];
 
+// eslint-disable-next-line no-undef
 if(process.env.NODE_ENV === 'development') {
-    middlewares.push(logger)
+	middlewares.push(logger);
 }
 
 const store = createStore(rootReducers, applyMiddleware(...middlewares));
 
-sagaMiddleWare.run(rootSaga)
+sagaMiddleWare.run(rootSaga);
 
 const persistor = persistStore(store);
 
