@@ -53,11 +53,12 @@ export function* signOut() {
     }
 }
 
-export function* signUp({ payload:{ displayName, email, password } }) {
+export function* signUp({ payload:{ name: displayName, email, password } }) {
     try {
         const { user } = yield auth.createUserWithEmailAndPassword(email, password);
         yield put(signUpSuccess({ user, additionalData: { displayName } }));
     } catch(error) {
+        yield alert(error)
         yield put(signUpFailure(error))
     }
 }

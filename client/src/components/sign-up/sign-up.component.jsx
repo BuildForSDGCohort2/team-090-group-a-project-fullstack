@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import CustomInput from '../custom-input/custom-input.component';
 import CustomButton from '../custom-button/custom-button.component';
+import { signUpStart } from '../../redux/user/user.action';
+
  
-const SignUp = () => {
+const SignUp = ({ signUpStart }) => {
 
     const [ credentials, setCredentials ] = useState({ name: '', email: '', password: '', confirm: '' });
 
@@ -18,7 +21,7 @@ const SignUp = () => {
         }
 
         try {
-            //signUpStart(credentials);
+            signUpStart(credentials);
             setCredentials({ displayName: '', email: '', password: '', confirmPassword: '' })
         } catch(error) {
             console.log('An error occured', error.message)
@@ -41,6 +44,11 @@ const SignUp = () => {
             <CustomButton handleSubmit={handleSubmit}>{'Submit'}</CustomButton>
         </div>
     );
-} 
+}
 
-export default SignUp;
+
+const mapDispatchToProps = dispatch => ({
+    signUpStart: credentials => dispatch(signUpStart(credentials))
+});
+
+export default connect(null, mapDispatchToProps) (SignUp);
