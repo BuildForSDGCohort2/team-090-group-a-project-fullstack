@@ -28,7 +28,7 @@ const SignIn = ({ emailSignInStart }) => {
 
     return (
         <div>
-            <h1>Sign Up</h1>
+            <h1>Sign In</h1>
             <CustomInput handleChange={handleChange} name={'email'} type='email' placeholder={'Email'} type={'text'} required/>
             <CustomInput handleChange={handleChange} name={'password'} placeholder={'Password'} type={'password'}  required/>
             <CustomButton handleSubmit={handleSubmit}>{'Submit'}</CustomButton>
