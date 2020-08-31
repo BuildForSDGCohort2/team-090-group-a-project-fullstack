@@ -5,10 +5,6 @@ import CustomButton from '../custom-button/custom-button.component';
 import { emailSignInStart } from '../../redux/user/user.action';
 import Proptypes from 'prop-types';
 
-SignIn.propTypes = {
-	emailSignInStart: Proptypes.func
-};
- 
 const SignIn = ({ emailSignInStart }) => {
 	const [ credentials, setCredentials ] = useState({ email: '', password: '' });
 
@@ -39,7 +35,10 @@ const SignIn = ({ emailSignInStart }) => {
 	);
 };
 
-
+SignIn.propTypes = {
+	emailSignInStart: Proptypes.func
+};
+ 
 const mapDispatchToProps = dispatch => ({
 	emailSignInStart: credentials => dispatch(emailSignInStart(credentials))
 });
