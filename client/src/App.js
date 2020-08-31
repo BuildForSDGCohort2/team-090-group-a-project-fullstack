@@ -21,7 +21,7 @@ const App = ({ currentUser }) => {
 	const history = useHistory();
 	useEffect(() => {
 		if(currentUser) history.push('/home');
-	}, [currentUser]);
+	}, [currentUser, history]);
 
 	return (
 		<div>
