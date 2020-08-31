@@ -9,11 +9,6 @@ import { signOutStart } from '../../redux/user/user.action';
 import { HeaderContainer, LogoContainer, OptionContainer, OptionsContainer } from './header.styles';
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
-Header.propTypes = {
-	currentUser: Proptypes.object,
-	signOutStart: Proptypes.func
-};
-
 const Header = ({ currentUser, signOutStart }) => (
 	<HeaderContainer>
 		<LogoContainer to='/'>
@@ -36,6 +31,12 @@ const Header = ({ currentUser, signOutStart }) => (
    
 	</HeaderContainer>
 );
+
+
+Header.propTypes = {
+	currentUser: Proptypes.object,
+	signOutStart: Proptypes.func
+};
 
 const mapStateToProps = createStructuredSelector({
 	currentUser: selectCurrentUser

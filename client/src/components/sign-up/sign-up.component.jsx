@@ -5,10 +5,6 @@ import CustomButton from '../custom-button/custom-button.component';
 import { signUpStart } from '../../redux/user/user.action';
 import Proptypes from 'prop-types';
 
-SignUp.propTypes = {
-	signUpStart: Proptypes.func
-};
- 
 const SignUp = ({ signUpStart }) => {
 
 	const [ credentials, setCredentials ] = useState({ name: '', email: '', password: '', confirm: '' });
@@ -51,6 +47,10 @@ const SignUp = ({ signUpStart }) => {
 };
 
 
+SignUp.propTypes = {
+	signUpStart: Proptypes.func
+};
+ 
 const mapDispatchToProps = dispatch => ({
 	signUpStart: credentials => dispatch(signUpStart(credentials))
 });
