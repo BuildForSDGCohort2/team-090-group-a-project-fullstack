@@ -13,10 +13,6 @@ import HomePage from './pages/home/home.component';
 import './App.css';
 import { selectCurrentUser } from './redux/user/user.selector';
 
-App.propTypes = {
-	currentUser: Proptypes.object
-};
-
 const App = ({ currentUser }) => {
 	const history = useHistory();
 	useEffect(() => {
@@ -34,6 +30,11 @@ const App = ({ currentUser }) => {
 			</Switch>
 		</div>
 	);
+};
+
+
+App.propTypes = {
+	currentUser: Proptypes.object
 };
 
 const mapStateToProps = () => createStructuredSelector({
