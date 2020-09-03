@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
-    height: 50px;
+    height: 60px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -11,7 +11,7 @@ export const HeaderContainer = styled.div`
     border-bottom: solid #5E5E5E40 1px;
 
     @media screen and (max-width: 800px) {
-        height: 40px;
+        height: 50px;
         padding: 10px;
         margin-bottom: 20px;
     }
