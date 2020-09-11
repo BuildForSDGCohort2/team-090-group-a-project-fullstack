@@ -3,28 +3,53 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
-    height: 70px;
+    height: 60px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     margin-bottom: 25px;
+    border-bottom: solid #5E5E5E40 1px;
 
     @media screen and (max-width: 800px) {
-        height: 60px;
+        height: 50px;
         padding: 10px;
         margin-bottom: 20px;
     }
 `;
 
-export const LogoContainer = styled(Link)`
+export const FlexContainer = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+export const LogoContainer = styled.div`
     height: 100%;
-    width: 70px;
-    padding: 25px 0;
+    padding: 2px 15px;
+    display: flex;
+    align-items: center;
 
     @media screen and (max-width: 800px) {
-        width: 50px;
         padding: 0;
     }
+
+    a {
+            text-decoration: none;
+            color: blue;
+        }
+`;
+
+export const MenuContainer = styled.div`
+    height: 100%;
+    width: 20px;
+    padding: 2px 15px;
+    display: flex;
+    align-items: center;
+    
+
+    .menu {
+        cursor: pointer;
+    }
+
 `;
 
 export const OptionsContainer = styled.div`
@@ -37,9 +62,22 @@ export const OptionsContainer = styled.div`
     @media screen and (max-width: 800px) {
         width: 80%;
     }
+
+    a{
+        text-decoration: none;
+        font-weight: lighter;
+    }
+    .gb_cf{
+        color: red;
+    }
 `;
 
 export const OptionContainer = styled(Link)`
     padding: 10px 15px;
+    color: red;
     cursor: pointer;
+
+    .gb_cf{
+        color: red;
+    }
 `;
