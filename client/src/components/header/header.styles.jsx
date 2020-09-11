@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { Link } from 'react-router-dom';
-
 export const HeaderContainer = styled.div`
     height: 60px;
     width: 100%;
@@ -65,19 +63,115 @@ export const OptionsContainer = styled.div`
 
     a{
         text-decoration: none;
-        font-weight: lighter;
-    }
-    .gb_cf{
-        color: red;
     }
 `;
 
-export const OptionContainer = styled(Link)`
+export const OptionContainer = styled.div`
     padding: 10px 15px;
     color: red;
-    cursor: pointer;
 
-    .gb_cf{
-        color: red;
+    .drop-down-container{
+        background: transparent;
     }
-`;
+
+    .dots{
+        cursor: pointer;
+        border-radius: 50%;
+        background: transparent;
+        transition: 0.2s;
+        width: 25px;
+        height: 25px;
+        -moz-box-sizing: border-box; 
+        -webkit-box-sizing: border-box; 
+        box-sizing: border-box; 
+    }
+
+    .drop-down{
+        display: block;
+        position: absolute;
+        color: whitesmoke;
+        background: #5E5E5E;
+        border-radius: 3px;
+        top: 60px;
+        right: 52px;
+        font-size: 11px;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.3s;
+
+        p{
+            padding: 5px 5px 6px 5px;
+            text-align: center;
+            margin: 0;
+        }
+    }
+
+    .drop-down-menu{
+        position: absolute;
+        background: whitesmoke;
+        width: 100px;
+        height:  70px;
+        border-radius: 3px;
+        top: 101px;
+        right: 37px;
+        font-size: 14px;
+        padding: 1.5em;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.3s;
+
+        a{
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            color: black;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%)
+        }
+
+        .link1{
+            position: relative;
+            width: 100%;
+            background: #5E5E5E;
+            margin: 0 0 1em 0;
+            height: 30px;
+            text-align: center;
+            border-radius: 3px;
+        }
+        .link2{
+            position: relative;
+            width: 100%;
+            background: #5E5E5E;
+            height: 30px;
+            text-align: center;
+            border-radius: 3px;
+        }
+    }
+/*
+    :hover .drop-down{
+        position: absolute;
+        top: 60px;
+        right: 52px;
+        display: block;
+        visibility: visible;
+        opacity: 1;
+        transition: 0.3s;
+    }
+
+    .drop-down-container:hover .dots {
+        background: #5E5E5E20;
+        padding: 5px;
+        transition: 0.2s;
+        transform: scale(1.4);
+    }
+
+    */
+
+   .drop-down-container:focus>.drop-down-menu{
+        top: 61px;
+        visibility: visible;
+        opacity: 1;
+        transition: 0.3s;
+    }
+`

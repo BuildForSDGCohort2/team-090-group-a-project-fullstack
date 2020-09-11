@@ -33,7 +33,7 @@ export const BackdropStyle = styled.div`
     .box{
         position:  absolute;
         width: 40%;
-        height: 60vh;
+        height: 65vh;
         border-radius: 8px;
         left: 50%;
         top: 50%;
@@ -41,6 +41,33 @@ export const BackdropStyle = styled.div`
         background-color: whitesmoke;
         border: solid #5E5E5E 1px;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @media screen and (max-width: 1200px) {
+            width: 60%;
+        }
+
+        @media screen and (max-width: 800px) {
+            width: 80%;
+        }
+
+        .first{
+            flex: 1;
+        }
+
+        hr{
+            background-color: #00000099;
+            width: 80%;
+            height: 1px;
+            border: none;
+        }
+
+        .last{
+            flex: 1;
+            margin-bottom: 1em;
+        }
 
         .backdrop-logo{
             padding: 0.5em;
@@ -55,5 +82,30 @@ export const BackdropStyle = styled.div`
             font-size: 13px;
             margin: auto;
         }
+
+        .below{
+            width: 80%;
+            position: absolute;
+            bottom: 1em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+        }
     }
+`
+
+export const Button = styled.button `
+    position: absolute;
+    border: none;
+    color: white;
+    background-color: blue;
+    padding: 15px 40px;
+    border-radius: 2px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    bottom: 5em;
 `

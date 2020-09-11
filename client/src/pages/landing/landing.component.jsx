@@ -1,6 +1,6 @@
 import React from 'react';
 import {Style} from './landing.styles';
-import Backdrop from './Backdrop';
+//import Backdrop from './Backdrop';
 
 const LandingPage = () => (
 	<Style>
@@ -120,7 +120,7 @@ const LandingPage = () => (
 			</svg>
 		</div>
 		<h3 className = "comment">You currently do not have any existing class.</h3>
-		<Backdrop />
+		{/*<Backdrop />*/}
 	</Style>
 );
 
