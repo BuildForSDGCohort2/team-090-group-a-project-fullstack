@@ -5,7 +5,7 @@ import { ErrorViewContainer } from './error-view.styled'
 const ErrorView = ({ message }) => (
     <ErrorViewContainer>
         <ErrorSVG />
-		<h3 className="comment">{message ? message : 'You currently do not have any existing class.'}</h3>
+		<h3 className="comment">{message ? message : 'You currently do not belong to any classroom.'}</h3>
     </ErrorViewContainer>
 );
 

@@ -1,4 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect'
+
+import { selectCurrentUser } from '../../redux/user/user.selector';
 
 import Backdrop from '../../components/backdrop/backdrop.components';
 import ErrorView from '../../components/error-view/error-view.component';
@@ -17,5 +21,8 @@ const LandingPage = ({ currentUser }) => (
 	</LandingPageContainer>
 );
 
+const mapStateToProps = createStructuredSelector({
+	currentUser: selectCurrentUser
+});
 
-export default LandingPage;
+export default connect(mapStateToProps)(LandingPage);
