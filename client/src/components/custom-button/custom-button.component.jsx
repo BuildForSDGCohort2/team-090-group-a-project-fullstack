@@ -10,7 +10,6 @@ const CustomButton = ({ children, handleSubmit, ...otherProps }) => (
 );
 
 CustomButton.propTypes = {
-	children: PropTypes.element,
 	handleSubmit: PropTypes.func
 };
 
