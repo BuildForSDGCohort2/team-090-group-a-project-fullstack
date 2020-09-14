@@ -13,13 +13,35 @@ import CreateClassroomIcon from '@material-ui/icons/Add';
 import { selectCurrentUser } from '../../redux/user/user.selector';
 import { signOutStart } from '../../redux/user/user.action';
 
-import { HeaderContainer, FlexContainer, LogoContainer, OptionContainer, OptionsContainer, StyledMenu, StyledMenuItem } from './header.styles';
+import CreateClassroomComponent from '../create-class/create-class.component';
+
+import { HeaderContainer, FlexContainer, LogoContainer, OptionContainer, OptionsContainer, UserMenuContainer, ClassroomMenuContainer, StyledMenuItem } from './header.styles';
 import { ReactComponent as UserMenu } from '../../assets/image.svg';
 import Logo from '../logo/logo.component';
 
 const Header = ({ currentUser, signOutStart }) => {
+	
+	const [createClassroom, setCreateClassroom] = React.useState(false);
+	const [joinClassroom, setJoinClassroom] = React.useState(false);
 	const [userMenu, setUserMenu] = React.useState(null);
 	const [classroomMenu, setClassroomMenu] = React.useState(null);
+
+	const handleCreateClassroom = () => {
+		setCreateClassroom(true);
+		handleClassroomMenuClose()
+	  };
+	
+	const handleCloseCreateClassroom = () => {
+	setCreateClassroom(false);
+	};
+
+	const handleJoinClassroom = () => {
+		setJoinClassroom(true);
+	  };
+	
+	const handleCloseJoinClassroom = () => {
+		setJoinClassroom(false);
+	};
 
 	const handleUserMenuClick = (event) => {
 		setUserMenu(event.currentTarget);
@@ -69,7 +91,7 @@ const Header = ({ currentUser, signOutStart }) => {
 				</OptionContainer>
 			</OptionsContainer>
 	
-			<StyledMenu
+			<UserMenuContainer
 				id="user-menu"
 				anchorEl={userMenu}
 				keepMounted
@@ -85,9 +107,9 @@ const Header = ({ currentUser, signOutStart }) => {
 						onClick={onSignoutStart}
 					/>
 				</StyledMenuItem>
-			</StyledMenu>
+			</UserMenuContainer>
 
-			<StyledMenu
+			<ClassroomMenuContainer
 				id="classroom-menu"
 				anchorEl={classroomMenu}
 				keepMounted
@@ -104,9 +126,11 @@ const Header = ({ currentUser, signOutStart }) => {
 					<ListItemIcon>
 						<CreateClassroomIcon fontSize="small" />
 					</ListItemIcon>
-					<ListItemText primary="Create a classroom" />
+					<ListItemText primary="Create a classroom" onClick={handleCreateClassroom} />
 				</StyledMenuItem>
-			</StyledMenu>
+			</ClassroomMenuContainer>
+
+			<CreateClassroomComponent open={createClassroom} handleClose={handleCloseCreateClassroom} />
 	   
 		</HeaderContainer>
 	);

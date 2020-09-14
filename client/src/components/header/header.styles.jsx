@@ -18,7 +18,11 @@ export const HeaderContainer = styled.div`
     }
 `;
 
-export const StyledMenu = styled(Menu)`
+export const UserMenuContainer = styled(Menu)`
+
+`;
+
+export const ClassroomMenuContainer = styled(Menu)`
 
 `;
 
