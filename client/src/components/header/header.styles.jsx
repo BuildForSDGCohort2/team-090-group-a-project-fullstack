@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
@@ -14,6 +16,18 @@ export const HeaderContainer = styled.div`
         padding: 10px;
         margin-bottom: 20px;
     }
+`;
+
+export const UserMenuContainer = styled(Menu)`
+
+`;
+
+export const ClassroomMenuContainer = styled(Menu)`
+
+`;
+
+export const StyledMenuItem = styled(MenuItem)`
+
 `;
 
 export const FlexContainer = styled.div`
