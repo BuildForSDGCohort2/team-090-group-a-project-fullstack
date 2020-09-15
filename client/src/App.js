@@ -1,32 +1,24 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Proptypes from 'prop-types';
 
 import Header from './components/header/header.component';
-import RegisterPage from './pages/register/register.component';
-import LoginPage  from './pages/login/logiin.component';
 import LandingPage from './pages/landing/landing.component';
-import HomePage from './pages/home/home.component';
+import ClassroomPage from './pages/classroom/classroom.component';
 
 import './App.css';
 import { selectCurrentUser } from './redux/user/user.selector';
 
 const App = ({ currentUser }) => {
-	const history = useHistory();
-	useEffect(() => {
-		if(currentUser) history.push('/home');
-	}, [currentUser, history]);
 
 	return (
 		<div>
 			<Header />
 			<Switch>
-				<Route exact path='/' render={() => currentUser ? (<Redirect to='/home' />) : (<LandingPage />)} />
-				<Route path='/register' component={RegisterPage} />
-				<Route path='/login' component={LoginPage} />
-				<Route path='/home' render={() => !currentUser ? (<Redirect to='/' />) : (<HomePage />)} />
+				<Route exact path='/' component={LandingPage} />
+				<Route path='/classroom/:id' render={() => !currentUser ? (<Redirect to='/' />) : (<ClassroomPage />)} />
 			</Switch>
 		</div>
 	);
