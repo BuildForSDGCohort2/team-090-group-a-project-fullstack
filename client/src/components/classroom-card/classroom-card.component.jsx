@@ -19,7 +19,7 @@ const ClassroomCard = ({ classroom, ...otherProps }) => {
     const navigateToUrl = url =>{
         history.push(url)
     }
-    
+
     return (
         <Card {...otherProps} variant="outlined">
             <CardHeader
@@ -41,7 +41,10 @@ const ClassroomCard = ({ classroom, ...otherProps }) => {
                         {classroom.classroomName}
                     </Typography>
                     <Typography color="textSecondary">
-                        {`Created ${getLocalTime(classroom.createdAt)}`}
+                        {
+                            `${getLocalTime(classroom.createdAt)} by 
+                            ${classroom.classMembersInfo[classroom.createdBy]['memberProfile']['displayName']}`
+                        }
                     </Typography>
                     <Typography variant="body2" component="p">
                         <br />

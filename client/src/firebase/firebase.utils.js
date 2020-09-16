@@ -23,8 +23,6 @@ export const googleProvider = new firebase.auth.GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
 
-const currentUTCTime = new Date(Date.now()).toISOString();
-
 export const createUserProfileDocument = async (userAuth, additionalData) => {
 	if (!userAuth) return;
 
@@ -65,52 +63,17 @@ export const getCurrentUser = () => {
 };
 
 
-export const startCreateNewClassroom = async ({ currentUser: { id: createdBy }, formData }) => {
+export const startCreateNewClassroom = async ({ currentUser, formData }) => {
 	const classroomsRef = await getClassroomsRef()
-	const userRef = await getUserRef(createdBy)
+	const userRef = await getUserRef(currentUser.id)
 	const userSnapshot = await userRef.get();
 	const newClassroomRef = await classroomsRef.doc();
 	
-	const classroom = await createNewclassroom(formData, createdBy, newClassroomRef);
+	const classroom = await createNewclassroom(formData, currentUser, newClassroomRef);
 
 	await mapClassroomToUserRef(userRef, userSnapshot, classroom.id)
 
 	return classroom;
-}
-
-const createNewclassroom = (formData, createdBy, newClassroomRef) => {
-	const classMembersInfo = createClassmemberInfo(createdBy, { isAdmin: true })
-	const classroom = { 
-		...formData,
-		allowUnverifiedClassMembers: true,
-		classMembersInfo,
-		classMembersMap: [createdBy],
-		createdBy,
-		id: newClassroomRef.id, 
-		createdAt: currentUTCTime
-	};
-
-	newClassroomRef.set({
-		...classroom,
-	});
-
-	return classroom
-}
-
-const createClassmemberInfo = (memberId, { isAdmin }) => {
-	const classMembersInfo = {}
-	const classMemberInfo = { 
-		joinDate: currentUTCTime,
-		isVerified: isAdmin,
-		isBlocked: false,
-		isInClass: false,
-		isOnline: false,
-		isAdmin 
-	}
-
-	classMembersInfo[memberId] = classMemberInfo;
-
-	return classMembersInfo;
 }
 
 export const becomeClassroomMember = async ({ classroomId, currentUser }) => {
@@ -123,64 +86,114 @@ export const becomeClassroomMember = async ({ classroomId, currentUser }) => {
 
 	if(!classroomSnapshot.exists || !userSnapshot.exists) return null;
 
-	const classroomMembers = await fetchClassroomMembers(classroomId, classroomSnapshot);
-	const alreadyAMember = classroomMembers.find(member => member.id === currentUserId);
+	const classroomMembers = await fetchClassroomMembers(classroomId);
+	const currentUserIsAMember = classroomMembers.find(member => member.id === currentUserId);
 
-	if (!alreadyAMember) {
-		const newClassRoomData = await mapUserToClassroomRef(classroomRef, classroomSnapshot, currentUserId);
+	if (!currentUserIsAMember) {
+		const newClassRoomData = await mapUserToClassroomRef(classroomRef, classroomSnapshot, currentUser);
 		await mapClassroomToUserRef(userRef, userSnapshot, classroomId);
-
 		return { ...newClassRoomData, classroomMembers: [...classroomMembers, currentUser] };  
+	} else {
+		await updateClassMemberProfile(classroomRef, classroomSnapshot, currentUser);
 	}
-	return { ...classroomSnapshot.data(), classroomMembers }
+	return { ...classroomSnapshot.data(), classroomMembers };
 };
-
-const mapUserToClassroomRef = (classroomRef, classroomSnapshot, currentUserId) => {
-	const classroomData = classroomSnapshot.data();
-	const unverifiedClassMembersMap= [...classroomData.unverifiedClassMembersMap, currentUserId]
-		const newClassRoomData = { 
-			...classroomData, 
-			unverifiedClassMembersMap,
-			updatedAt: currentUTCTime 
-		}
-
-		classroomRef.set({
-			...newClassRoomData
-		});
-
-		return newClassRoomData;
-}
 
 export const fetchUserClassrooms = async (userId) => {
 	let classrooms = [];
 	const classroomsRef = await getClassroomsRef();
-	const classroomsSnapshot = await classroomsRef.where('unverifiedClassMembersMap', 'array-contains-any', [userId]).get();
+	const classroomsSnapshot = await classroomsRef.where('classMembersMap', 'array-contains-any', [userId]).get();
 	classroomsSnapshot.forEach(doc => classrooms.push(doc.data()));
 	return classrooms.filter(classroom => {
 		if(classroom.allowUnverifiedClassMembers) return true;
+		return classroom.classMembersInfo[userId].isVerified;
+	});
+}
+
+const createNewclassroom = (formData, currentUser, newClassroomRef) => {
+	const classMembersInfo = createClassMemberInfo(currentUser, { isAdmin: true })
+	const classroom = { 
+		...formData,
+		allowUnverifiedClassMembers: true,
+		classMembersInfo,
+		classMembersMap: [currentUser.id],
+		createdBy: currentUser.id,
+		id: newClassroomRef.id, 
+		createdAt: currentUTCTime
+	};
+
+	newClassroomRef.set({
+		...classroom,
+	});
+
+	return classroom
+}
+
+const createClassMemberInfo = (memberProfile, { isAdmin }) => {
+	const classMembersInfo = {}
+	const classMemberInfo = { 
+		joinDate: currentUTCTime,
+		isVerified: isAdmin,
+		isBlocked: false,
+		isInClass: false,
+		isOnline: false,
+		memberProfile,
+		isAdmin 
+	}
+
+	classMembersInfo[memberProfile.id] = classMemberInfo;
+
+	return classMembersInfo;
+}
+
+
+const mapUserToClassroomRef = (classroomRef, classroomSnapshot, currentUser) => {
+	const classroomData = classroomSnapshot.data();
+	const classMembersMap= [...classroomData.classMembersMap, currentUser.id];
+	const newclassMemberInfo = createClassMemberInfo(currentUser);
+	const classMembersInfo = { ...classroomData.classMembersInfo, ...newclassMemberInfo };
+
+	const newClassRoomData = { 
+		...classroomData, 
+		classMembersMap,
+		classMembersInfo,
+		updatedAt: currentUTCTime 
+	}
+
+	classroomRef.set({
+		...newClassRoomData
+	});
+
+	return newClassRoomData;
+}
+
+const updateClassMemberProfile = (classroomRef, classroomSnapshot, currentUser) => {
+	const classroomData = classroomSnapshot.data();
+	if(currentUser.id !== classroomData.createdBy) return;
+	const { classMembersInfo } = classroomData;
+	classMembersInfo[currentUser.id]['memberProfile'] = currentUser;
+	classroomRef.set({
+		...classroomData
 	});
 }
 
 const mapClassroomToUserRef = (userRef, userSnapshot, classroomId) => {
 	const userData = userSnapshot.data();
-		const classroomsMap = [...userData.classroomsMap, classroomId];
+	const classroomsMap = [...userData.classroomsMap, classroomId];
 
-		userRef.set({
-			...userData,
-			classroomsMap,
-			updatedAt: currentUTCTime
-		});
+	userRef.set({
+		...userData,
+		classroomsMap,
+		updatedAt: currentUTCTime
+	});
 }
 
-const fetchClassroomMembers = async (classroomId, classroomData) => {
+const fetchClassroomMembers = async (classroomId) => {
 	let classMembersWithProfile = [];
-	
-	const { unverifiedClassMembers, verifiedClassMembers, allowUnverifiedClassMembers } = classroomData;
-	const classMembersMap = allowUnverifiedClassMembers ? unverifiedClassMembers : verifiedClassMembers;
 	const usersRef = await getUsersRef()
 	const userSnapshot = await usersRef.where('classroomsMaps', 'array-contains-any', [classroomId]).get();
 	userSnapshot.forEach(doc => classMembersWithProfile.push(doc.data()));
-	return classMembersWithProfile.filter(profile => classMembersMap.includes(profile.id));
+	return classMembersWithProfile;
 }
 
 const getClassroomsRef = async () => {
@@ -198,6 +211,8 @@ const getClassroomRef = async classroomId => {
 const getUserRef = async userId => {
 	return await firestore.doc(`users/${userId}`);
 }
+
+const currentUTCTime = new Date(Date.now()).toISOString();
 
 
 export default firebase;
