@@ -1,22 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { BackdropContainer } from './backdrop.styles';
+import { AuthenticationModalContainer } from './authentication-modal.styles';
 import {Link} from 'react-router-dom';
 import Logo from '../logo/logo.component'
 
 import { googleSignInStart } from '../../redux/user/user.action';
 
-function Backdrop({ googleSignInStart }){
+function AuthenticationModal({ googleSignInStart }){
     return(
-        <BackdropContainer>
+        <AuthenticationModalContainer>
             <div className="box">
                 <Logo />
                 <p>You never have to miss a class with Scool, you can learn and teach from anywhere. <Link to='/'>Learn more</Link></p>
                 
                 <button onClick={googleSignInStart}>Continue with google</button>
             </div>
-        </BackdropContainer>
+        </AuthenticationModalContainer>
     )
 }
 
@@ -25,4 +25,4 @@ const mapDispatchToProps = (dispatch) =>({
     googleSignInStart: () => dispatch(googleSignInStart())
 });
 
-export default connect(null, mapDispatchToProps)(Backdrop)
+export default connect(null, mapDispatchToProps)(AuthenticationModal);
