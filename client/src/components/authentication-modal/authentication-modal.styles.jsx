@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const BackdropContainer = styled.div`
+export const AuthenticationModalContainer = styled.div`
     position: fixed;
     top: 0;
     width: 100%;

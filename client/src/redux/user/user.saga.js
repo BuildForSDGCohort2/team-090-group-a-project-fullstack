@@ -3,13 +3,16 @@ import { takeLatest, call, all, put } from 'redux-saga/effects';
 import  UserActionTypes from './user.types';
 
 import { signInSuccess, signInFailure, signOutSuccess, signOutFailure, signUpFailure, signUpSuccess } from './user.action';
+import { storeUserClassrooms } from '../classroom/classroom.action';
 
-import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils';
+import { auth, googleProvider, createUserProfileDocument, getCurrentUser, fetchUserClassrooms } from '../../firebase/firebase.utils';
 
 export function* getSnapShotFromUserAuth(userAuth, additionalData) {
 	try {
 		const userRef = yield call(createUserProfileDocument, userAuth, additionalData);
 		const userSnapshot = yield userRef.get();
+		const userClassrooms = yield fetchUserClassrooms(userSnapshot.id);
+		yield put(storeUserClassrooms(userClassrooms));
 		yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
 	} catch(error) {
 		yield put(signInFailure(error));
