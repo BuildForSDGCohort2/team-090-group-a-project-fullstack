@@ -7,7 +7,7 @@ import { selectClassrooms } from '../../redux/classroom/classroom.selector';
 
 import Typography from '@material-ui/core/Typography';
 
-import AuthenticationModal from '../../components/authentication-modal/authenticaton-modal.components';
+import AuthenticationModal from '../../components/authentication-modal/authenticaton-modal.component';
 import EmptyRecord from '../../components/empty-record/empty-record.component';
 import ClassroomsGrid from '../../components/classrooms-grid/classrooms-grid.component';
 
