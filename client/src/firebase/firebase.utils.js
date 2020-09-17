@@ -93,9 +93,8 @@ export const becomeClassroomMember = async ({ classroomId, currentUser }) => {
 		const newClassRoomData = await mapUserToClassroomRef(classroomRef, classroomSnapshot, currentUser);
 		await mapClassroomToUserRef(userRef, userSnapshot, classroomId);
 		return { ...newClassRoomData, classroomMembers: [...classroomMembers, currentUser] };  
-	} else {
-		await updateClassMemberProfile(classroomRef, classroomSnapshot, currentUser);
-	}
+	} 
+	await updateClassMemberProfile(classroomRef, classroomSnapshot, currentUser);
 	return { ...classroomSnapshot.data(), classroomMembers };
 };
 

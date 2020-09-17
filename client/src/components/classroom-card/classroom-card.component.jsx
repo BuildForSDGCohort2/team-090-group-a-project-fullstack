@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { getLocalTime } from '../../utils/date';
-import { navigateToUrl } from '../../utils/navigation';
 
 const ClassroomCard = ({ classroom, ...otherProps }) => {
     const history = useHistory();
