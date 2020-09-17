@@ -77,7 +77,7 @@ export const startCreateNewClassroom = async ({ currentUser, formData }) => {
 }
 
 export const becomeClassroomMember = async ({ classroomId, currentUser }) => {
-	const { id: currentUserId } = currentUser;
+	const currentUserId = currentUser.id;
 	const classroomRef = await getClassroomRef(classroomId);
 	const userRef = await getUserRef(currentUserId);
 
@@ -92,10 +92,12 @@ export const becomeClassroomMember = async ({ classroomId, currentUser }) => {
 	if (!currentUserIsAMember) {
 		const newClassRoomData = await mapUserToClassroomRef(classroomRef, classroomSnapshot, currentUser);
 		await mapClassroomToUserRef(userRef, userSnapshot, classroomId);
-		return { ...newClassRoomData, classroomMembers: [...classroomMembers, currentUser] };  
+		const classroomData = { ...newClassRoomData, classroomMembers: [...classroomMembers, currentUser] }; 
+		return classroomData; 
 	} 
 	await updateClassMemberProfile(classroomRef, classroomSnapshot, currentUser);
-	return { ...classroomSnapshot.data(), classroomMembers };
+	const classroomData = { ...classroomSnapshot.data(), classroomMembers };
+	return classroomData;
 };
 
 export const fetchUserClassrooms = async (userId) => {
