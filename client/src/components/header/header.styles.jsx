@@ -11,6 +11,10 @@ export const HeaderContainer = styled.div`
     justify-content: space-between;
     margin-bottom: 25px;
 
+    .grow {
+        flex-grow: 1;
+    }
+
     @media screen and (max-width: 800px) {
         height: 50px;
         padding: 10px;
@@ -30,25 +34,8 @@ export const StyledMenuItem = styled(MenuItem)`
 
 `;
 
-export const FlexContainer = styled.div`
-    display: flex;
-    align-items: center;
-`
-
 export const LogoContainer = styled.div`
-    height: 100%;
-    padding: 2px 15px;
-    display: flex;
-    align-items: center;
-
-    @media screen and (max-width: 800px) {
-        padding: 0;
-    }
-
-    a {
-            text-decoration: none;
-            color: blue;
-        }
+  cursor: pointer;
 `;
 
 export const MenuContainer = styled.div`
@@ -86,11 +73,5 @@ export const OptionsContainer = styled.div`
 `;
 
 export const OptionContainer = styled(Link)`
-    padding: 10px 15px;
-    color: red;
-    cursor: pointer;
 
-    .gb_cf{
-        color: red;
-    }
 `;

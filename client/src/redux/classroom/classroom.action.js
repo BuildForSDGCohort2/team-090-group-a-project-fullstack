@@ -44,3 +44,7 @@ export const storeUserClassrooms = payload => ({
     type: ClassroomActionTypes.STORE_USER_CLASSROOMS,
     payload
 });
+
+export const clearActiveClassroom = () => ({
+    type: ClassroomActionTypes.CLEAR_ACTIVE_CLASSROOM,
+})
