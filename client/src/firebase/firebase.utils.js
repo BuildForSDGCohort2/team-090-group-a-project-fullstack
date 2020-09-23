@@ -151,7 +151,7 @@ const createClassMemberInfo = (memberProfile, { isAdmin }) => {
 const mapUserToClassroomRef = (classroomRef, classroomSnapshot, currentUser) => {
 	const classroomData = classroomSnapshot.data();
 	const classMembersMap= [...classroomData.classMembersMap, currentUser.id];
-	const newclassMemberInfo = createClassMemberInfo(currentUser);
+	const newclassMemberInfo = createClassMemberInfo(currentUser, { isAdmin: false });
 	const classMembersInfo = { ...classroomData.classMembersInfo, ...newclassMemberInfo };
 
 	const newClassRoomData = { 
@@ -192,7 +192,7 @@ const mapClassroomToUserRef = (userRef, userSnapshot, classroomId) => {
 const fetchClassroomMembers = async (classroomId) => {
 	let classMembersWithProfile = [];
 	const usersRef = await getUsersRef()
-	const userSnapshot = await usersRef.where('classroomsMaps', 'array-contains-any', [classroomId]).get();
+	const userSnapshot = await usersRef.where('classroomsMap', 'array-contains-any', [classroomId]).get();
 	userSnapshot.forEach(doc => classMembersWithProfile.push(doc.data()));
 	return classMembersWithProfile;
 }

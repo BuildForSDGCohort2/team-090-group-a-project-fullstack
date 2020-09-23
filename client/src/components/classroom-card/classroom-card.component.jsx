@@ -1,15 +1,14 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import { CardContainer, CardActionAreaContainer } from './classroom-card.styles'
 import { getLocalTime } from '../../utils/date';
 
 const ClassroomCard = ({ classroom, ...otherProps }) => {
@@ -20,7 +19,7 @@ const ClassroomCard = ({ classroom, ...otherProps }) => {
     }
 
     return (
-        <Card {...otherProps} variant="outlined">
+        <CardContainer {...otherProps} variant="outlined">
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe">
@@ -34,7 +33,7 @@ const ClassroomCard = ({ classroom, ...otherProps }) => {
                 }
                 title={`ID: ${classroom.id}`}
             />
-            <CardActionArea onClick={() => navigateToUrl(`/classroom/${classroom.id}`)}>
+            <CardActionAreaContainer onClick={() => navigateToUrl(`/classroom/${classroom.id}`)}>
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {classroom.classroomName}
@@ -50,8 +49,8 @@ const ClassroomCard = ({ classroom, ...otherProps }) => {
                         {classroom.classroomDescription}
                     </Typography>
                 </CardContent>
-            </CardActionArea>
-        </Card>
+            </CardActionAreaContainer>
+        </CardContainer>
     );
 }
 

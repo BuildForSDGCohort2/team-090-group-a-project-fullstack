@@ -1,30 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import Proptypes from 'prop-types';
-import {Link} from 'react-router-dom';
+
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
+import VideoCallIcon from '@material-ui/icons/VideoCall';
+import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LogoutIcon from '@material-ui/icons/NavigateBefore';
-import JoinClassroomIcon from '@material-ui/icons/Group';
 import CreateClassroomIcon from '@material-ui/icons/Add';
 
 import { selectCurrentUser } from '../../redux/user/user.selector';
 import { signOutStart } from '../../redux/user/user.action';
 
 import CreateClassroomComponent from '../create-class/create-class.component';
+import VirtualClassroom from '../virtual-classroom/virtual-classroom.component';
 
-import { HeaderContainer, FlexContainer, LogoContainer, OptionContainer, OptionsContainer, UserMenuContainer, ClassroomMenuContainer, StyledMenuItem } from './header.styles';
-import { ReactComponent as UserMenu } from '../../assets/image.svg';
+import { HeaderContainer, LogoContainer, UserMenuContainer, ClassroomMenuContainer, StyledMenuItem } from './header.styles';
 import Logo from '../logo/logo.component';
+import { selectActiveClassroom } from '../../redux/classroom/classroom.selector';
 
-const Header = ({ currentUser, signOutStart }) => {
-	
-	const [createClassroom, setCreateClassroom] = React.useState(false);
-	const [joinClassroom, setJoinClassroom] = React.useState(false);
-	const [userMenu, setUserMenu] = React.useState(null);
-	const [classroomMenu, setClassroomMenu] = React.useState(null);
+const Header = ({ currentUser, signOutStart, activeClassroom }) => {
+	const [createClassroom, setCreateClassroom] = useState(false);
+	const [userMenu, setUserMenu] = useState(null);
+	const [classroomMenu, setClassroomMenu] = useState(null);
+	const [virtualClassroom, setVirtualClassroom] = useState(false);
+	const history = useHistory();
 
 	const handleCreateClassroom = () => {
 		setCreateClassroom(true);
@@ -33,14 +41,6 @@ const Header = ({ currentUser, signOutStart }) => {
 	
 	const handleCloseCreateClassroom = () => {
 	setCreateClassroom(false);
-	};
-
-	const handleJoinClassroom = () => {
-		setJoinClassroom(true);
-	  };
-	
-	const handleCloseJoinClassroom = () => {
-		setJoinClassroom(false);
 	};
 
 	const handleUserMenuClick = (event) => {
@@ -59,6 +59,15 @@ const Header = ({ currentUser, signOutStart }) => {
 		setClassroomMenu(null);
 	};
 
+	const toggleVirtualClassroom = () => {
+		virtualClassroom ? setVirtualClassroom(false) : setVirtualClassroom(true);
+	}
+
+	const handleNavigateToHomepage = () => {
+		setVirtualClassroom(false);
+		history.push('/')
+	}
+
 	const onSignoutStart = () => {
 		handleUserMenuClose();
 		signOutStart();
@@ -66,31 +75,51 @@ const Header = ({ currentUser, signOutStart }) => {
 
 	return (
 		<HeaderContainer>
-			<FlexContainer>
-				<LogoContainer>
-					<Link to='/'>
+			{
+				currentUser &&
+				<AppBar position="static" elevation={1} color={'transparent'} >
+				<Toolbar>
+					<LogoContainer onClick={handleNavigateToHomepage}>
 						<Logo />
-					</Link>
-				</LogoContainer>
-			</FlexContainer>
+					</LogoContainer>
+					<div className={'grow'} />
+					<div className={'sectionDesktop'}>
+					{
+					activeClassroom ?	
+						<IconButton aria-label="Join virtual classroom" 
+						onClick={toggleVirtualClassroom}
+						color="inherit">
+							{
+								virtualClassroom ? <VideocamOffIcon /> : <VideoCallIcon />
+							}
+						</IconButton>
+						:
+
+						<IconButton aria-label="Create or Join Classroom" 
+							aria-controls="classroom-menu"
+							aria-haspopup="true"
+							onClick={handleClassroomMenuClick}
+							color="inherit">
+							<AddIcon />
+						</IconButton>
+
+					}
+					<IconButton
+						edge="end"
+						aria-label={currentUser.name}
+						color="inherit"
+						aria-controls="user-menu"
+						aria-haspopup="true"
+						onClick={handleUserMenuClick}
+					>
+					<AccountCircle />
+					</IconButton>
+				</div>
+				</Toolbar>
+      		</AppBar>
+			}
 			
-			<OptionsContainer>
-				<OptionContainer as="div"
-					aria-controls="classroom-menu"
-					aria-haspopup="true"
-					onClick={handleClassroomMenuClick}
-				>
-					<svg className ="gb_cf" width="24" height="24" viewBox="0 0 24 24" fill="#5E5E5E"><path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"></path></svg>
-				</OptionContainer>
-				<OptionContainer as="div"
-					aria-controls="user-menu"
-					aria-haspopup="true"
-					onClick={handleUserMenuClick}
-				>
-					<UserMenu />
-				</OptionContainer>
-			</OptionsContainer>
-	
+				
 			<UserMenuContainer
 				id="user-menu"
 				anchorEl={userMenu}
@@ -118,12 +147,6 @@ const Header = ({ currentUser, signOutStart }) => {
 			>
 				<StyledMenuItem>
 					<ListItemIcon>
-						<JoinClassroomIcon fontSize="small" />
-					</ListItemIcon>
-					<ListItemText primary="Join a classroom" />
-				</StyledMenuItem>
-				<StyledMenuItem>
-					<ListItemIcon>
 						<CreateClassroomIcon fontSize="small" />
 					</ListItemIcon>
 					<ListItemText primary="Create a classroom" onClick={handleCreateClassroom} />
@@ -131,6 +154,9 @@ const Header = ({ currentUser, signOutStart }) => {
 			</ClassroomMenuContainer>
 
 			<CreateClassroomComponent open={createClassroom} handleClose={handleCloseCreateClassroom} />
+			{
+				virtualClassroom && <VirtualClassroom toggleVirtualClassroom={toggleVirtualClassroom} />
+			}
 	   
 		</HeaderContainer>
 	);
@@ -143,11 +169,12 @@ Header.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-	currentUser: selectCurrentUser
+	currentUser: selectCurrentUser,
+	activeClassroom: selectActiveClassroom
 });
 
 const mapDispatchToProps = dispatch => ({
-	signOutStart: () => dispatch(signOutStart())
+	signOutStart: () => dispatch(signOutStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -1,5 +1,6 @@
 import ClassroomActionTypes from './classroom.types';
 import ClassroomTypes from './classroom.types';
+import { mapClassroomToClassrooms } from './classroom.utils';
 
 const InitialReducer = {
     classrooms: [],
@@ -37,20 +38,25 @@ const classroomReducer = (state = InitialReducer, action) => {
         case ClassroomTypes.JOIN_CLASSROOM_SUCCESS:
             return {
                 ...state,
-                classrooms: [...state.classrooms, action.payload],
+                classrooms: mapClassroomToClassrooms(state.classrooms, action.payload),
                 activeClassroom: action.payload,
                 joiningClassroom: false,
             }; 
         case ClassroomTypes.JOIN_CLASSROOM_FAILURE:
             return {
                 ...state,
-                joinClassroom: false,
+                joiningClassroom: false,
                 error: action.payload
             };
         case ClassroomActionTypes.STORE_USER_CLASSROOMS:
             return {
                 ...state,
                 classrooms: [...action.payload]
+            }
+        case ClassroomActionTypes.CLEAR_ACTIVE_CLASSROOM:
+            return {
+                ...state,
+                activeClassroom: null
             }
         default:
             return state;
