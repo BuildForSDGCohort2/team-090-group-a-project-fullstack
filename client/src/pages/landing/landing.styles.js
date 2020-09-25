@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 export const LandingPageContainer = styled.div`
-    margin: 10px;
+    .main {
+        padding: 20px;
+    }
     overflow: hidden;
     .error {
        display: none;

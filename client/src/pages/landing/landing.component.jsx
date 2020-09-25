@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect'
 
@@ -12,9 +12,14 @@ import EmptyRecord from '../../components/empty-record/empty-record.component';
 import ClassroomsGrid from '../../components/classrooms-grid/classrooms-grid.component';
 
 import { LandingPageContainer } from './landing.styles';
+import { clearActiveClassroom } from '../../redux/classroom/classroom.action';
 
 
-const LandingPage = ({ currentUser, classrooms }) => {
+const LandingPage = ({ currentUser, classrooms, clearActiveClassroom }) => {
+	useEffect(() => {
+		clearActiveClassroom()
+	}, [clearActiveClassroom]);
+
 	return  (
 		<LandingPageContainer>
 			{
@@ -24,7 +29,7 @@ const LandingPage = ({ currentUser, classrooms }) => {
 			:
 			classrooms.length ?
 			(
-			<div>
+			<div className="main">
 				<Typography variant="h6" gutterBottom>
 					{`Hello ${currentUser.displayName}, You belong to these classrooms`}
 				</Typography>
@@ -45,4 +50,8 @@ const mapStateToProps = createStructuredSelector({
 	classrooms: selectClassrooms
 });
 
-export default connect(mapStateToProps)(LandingPage);
+const mapDispatchToProps = dispatch =>({
+	clearActiveClassroom: () => dispatch(clearActiveClassroom())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);
