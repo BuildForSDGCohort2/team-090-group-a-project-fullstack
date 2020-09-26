@@ -17,8 +17,5 @@ export class VideoCall {
             config: { iceServers: [{ url: turnServer }] }
         })
         return this.peer
-    }
-    connect = (otherId) => {
-        this.peer.signal(otherId)
-    }  
+    } 
 } 
