@@ -86,7 +86,6 @@ const VirtualClassroom = (props) => {
         });
     
         socket.on('desc', data => {
-            alert('desc')
           const type = data.desc.type
           if (type === 'offer') return acceptOffer(data, peers);
           if (type === 'answer') return acceptAnswer(data, peers);
@@ -149,25 +148,29 @@ const VirtualClassroom = (props) => {
     }
   
     function getDisplay() {
-          getDisplayStream().then(stream => {
-              stream.oninactive = () => {
-              peers.forEach(item => {
-                  const { peer } = item;
-                  peer.removeStream(localStream);
-              })
-              getUserMedia().then(() => {
-                  peers.forEach(item => {
-                      const { peer } = item;
-                      peer.addStream(localStream);
-                  });
-                });
-              };
-              setLocalStream(stream)
-              peers.forEach(item => {
-                  const { peer } = item;
-                  peer.addStream(localStream);
-              });
+        Object.keys(peers).forEach(peerId=> {
+            const peer = peers[peerId]['peer'];
+            peer.removeStream(localStream);
+        });
+        getDisplayStream().then(stream => {
+            stream.oninactive = () => {
+            Object.keys(peers).forEach(peerId=> {
+                const peer = peers[peerId]['peer'];
+                peer.removeStream(stream);
             });
+            getUserMedia().then((stream) => {
+                    Object.keys(peers).forEach(peerId=> {
+                        const peer = peers[peerId]['peer'];
+                        peer.addStream(stream);
+                    });
+                });
+            };
+            setLocalStream(stream)
+            Object.keys(peers).forEach(peerId=> {
+                const peer = peers[peerId]['peer'];
+                peer.addStream(stream);
+            });
+        });
     }
 
     const defaultVideoProps = ({

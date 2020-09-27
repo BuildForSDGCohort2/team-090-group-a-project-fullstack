@@ -10,6 +10,7 @@ export class VideoCall {
     init = (stream, initiator) => {
         this.peer = new Peer({
             initiator: initiator,
+            audio: true,
             stream: stream,
             trickle: false,
             reconnectTimer: 1000,
