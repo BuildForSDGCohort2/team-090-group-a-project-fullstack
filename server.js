@@ -34,14 +34,13 @@ http.listen(port, error => {
 const io = socketIO.listen(http);
 io.on('connection', function (socket) {
     socket.on('join', function ({ classroomId, currentUserId}) {
+        console.log({currentUserId});
         socket.join(classroomId);
         io.to(classroomId).emit('new-peer', currentUserId);  
     });
     socket.on('signal', (data) => {
+        console.log(data)
         io.to(data.classroomId).emit('desc', data);        
-    });
-    socket.on('add-new-peer', ({ classroomId, peerId }) => {
-        io.to(classroomId).emit('new-peer', peerId);        
     });
 });
 

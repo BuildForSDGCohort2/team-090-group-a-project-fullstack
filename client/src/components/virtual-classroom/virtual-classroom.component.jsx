@@ -12,25 +12,25 @@ import { api } from '../../config';
 import { VirtualClassroomContainer, VirtualClassroomContents, LeftContentContainer, RightContentContainer, VideoBoxContainer } from './virtual-classroom.styles';
 
 const VirtualClassroom = (props) => {
-    const [localStream, setLocalStream] = useState({});
-    const [initiator, setInitiator] = useState(false);
+    const [localStream, setLocalStream] = useState();
     const [micState, setMicState] = useState(true);
     const [camState, setCamState] = useState(true);
     const [socket, setSocket] = useState();
     const [peers, setPeers] = useState({});
+    const [enterClassroom, setEnterClassroom] = useState(false)
 
     const { activeClassroom: { id: classroomId, createdBy: classroomOwnerId }, currentUser: { id: currentUserId } } = props;
   
     const videoCall = new VideoCall();
   
-    const initVideoCall = useCallback(() => {
+    const initVideoCall = useCallback((initiator) => {
       return videoCall.init(
           localStream,
           initiator
         );
-    }, [initiator, localStream, videoCall]);
+    }, [localStream, videoCall]);
   
-    const sendSignal = useCallback((peer, classroomId, peerId) => {
+    const sendSignal = (peer, classroomId, peerId) => {
       peer.on('signal', data => {
           const signal = {
             classroomId,
@@ -40,15 +40,16 @@ const VirtualClassroom = (props) => {
           };
           socket.emit('signal', signal);
         });
-    }, [currentUserId, socket])
+    }
   
-    const streamPeer = useCallback((peer, peerId) => {
-      peer.on('stream', stream => {
-          const newPeers = { ...peers }
-          newPeers[peerId] = { peer, stream };
-          setPeers({ ...newPeers });
-      });
-    },[peers])
+    const streamPeer = (peer, peerId, peers) => {
+        peers[peerId] = { peer };
+        setPeers(peers);
+        peer.on('stream', stream => {
+            peers[peerId] = { peer, stream };
+            setPeers(peers);
+        });
+    }
   
     const logPeerError = peer => {
       peer.on('error', function(err) {
@@ -56,49 +57,59 @@ const VirtualClassroom = (props) => {
         });
     }
   
-    const createOffer = useCallback(({ classroomId, peerId }) => {
-      setInitiator(true)
-      const peer = initVideoCall();
+    const createOffer = ({ classroomId, peerId }, peers) => {
+        if(peerId === currentUserId) return;
+        const peer = initVideoCall(true);
+    
+        sendSignal(peer, classroomId, peerId);
+        streamPeer(peer, peerId, peers);
+        logPeerError(peer);
+    }; 
   
-      sendSignal(peer, classroomId, peerId);
-      streamPeer(peer, peerId);
-      logPeerError(peer);
-    }, [initVideoCall, sendSignal, streamPeer]); 
+    const acceptOffer = ({ classroomId, senderId: peerId, desc }, peers) => {
+        if(peerId === currentUserId) return;
+        const peer = initVideoCall(false);
+        peer.signal(desc);
+        sendSignal(peer, classroomId, peerId);
+        streamPeer(peer, peerId, peers)
+    }
   
-    const acceptOffer = useCallback(({ classroomId, senderId: peerId, desc }) => {
+    const acceptAnswer = ({ desc, senderId: peerId  }, peers) => {
       if(peerId === currentUserId) return;
-      setInitiator(false)
-      const peer = initVideoCall();
-      peer.signal(desc);
-      sendSignal(peer, classroomId, peerId);
-      streamPeer(peer, peerId)
-    }, [initVideoCall, sendSignal, streamPeer, currentUserId]);
-  
-    const acceptAnswer = useCallback(({ desc, senderId: peerId  }) => {
-      if(peerId === currentUserId) return;
-      peers[peerId]['peer'].signal(desc);
-    }, [peers, currentUserId]);
+      try {   
+        peers[peerId]['peer'].signal(desc);
+      } catch(error) {
+          alert(error)
+      }
+    };
+
+    const startListeners = () => {
+        const peers = {}
+        socket.on('new-peer', peerId => {
+            createOffer({ classroomId, peerId }, peers);
+        });
+    
+        socket.on('desc', data => {
+          const type = data.desc.type
+          if (type === 'offer') return acceptOffer(data, peers);
+          if (type === 'answer') return acceptAnswer(data, peers);
+        });
+    };
   
     useEffect(() => {
-      if(!currentUserId && !classroomOwnerId && !classroomId) return;
-      const socket = io(api);
-      setSocket(socket);
-      socket.emit('join', { classroomId, currentUserId });
-  
-      getUserMedia();
-      socket.on('add-peer', peerId => {
-          if(peerId !== currentUserId) createOffer({ classroomId, peerId });
-      });
-  
-      socket.on('desc', data => {
-        const type = data.desc.type
-        if (type === 'offer') return acceptOffer(data);
-        if (type === 'answer') return acceptAnswer(data);
-      });
-    }, [classroomId, classroomOwnerId, currentUserId, createOffer, acceptOffer, acceptAnswer])
+        const newSocket = io(api);
+        setSocket(newSocket);
+        getUserMedia();
+    }, []);
+
+    const joinLiveStream = () => {
+        setEnterClassroom(true);
+        socket.emit('join', { classroomId, currentUserId });
+        startListeners();
+    }
   
   
-    function getUserMedia(cb) {
+    function getUserMedia() {
       return new Promise((resolve, reject) => {
         navigator.getUserMedia =
           navigator.getUserMedia ||
@@ -176,11 +187,28 @@ const VirtualClassroom = (props) => {
             <VirtualClassroomContents>
                 <LeftContentContainer>
                     <VideoBoxContainer>
+                        {
+                        localStream &&
                         <VideoDisplay stream={localStream} showControls={true} {...defaultVideoProps} />
+                        }
+                        {
+                         peers &&
+                         Object.keys(peers).map((peerId, key) => {
+                            const peer = peers[peerId]
+                             return (
+                                <VideoDisplay key={key} stream={peer['stream']} showControls={false} {...defaultVideoProps} />
+                             )
+                         })
+                        }
                     </VideoBoxContainer>
                 </LeftContentContainer>
                 <RightContentContainer>
-                    <LivestreamTab />
+                    {
+                        enterClassroom ?
+                        <LivestreamTab /> :
+                        currentUserId && classroomId ? <button onClick={joinLiveStream}>Enter classroom</button>
+                        : <div>An error occoured</div>
+                    }
                 </RightContentContainer>
             </VirtualClassroomContents>
         </VirtualClassroomContainer>
