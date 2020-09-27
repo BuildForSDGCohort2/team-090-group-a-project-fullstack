@@ -45,10 +45,6 @@ const VirtualClassroom = (props) => {
     const streamPeer = (peer, peerId, peers) => {
         peers[peerId] = { peer };
         setPeers(peers);
-        peer.on('stream', stream => {
-            peers[peerId] = { peer, stream };
-            setPeers(peers);
-        });
     }
   
     const logPeerError = peer => {
@@ -90,6 +86,7 @@ const VirtualClassroom = (props) => {
         });
     
         socket.on('desc', data => {
+            alert('desc')
           const type = data.desc.type
           if (type === 'offer') return acceptOffer(data, peers);
           if (type === 'answer') return acceptAnswer(data, peers);
@@ -189,14 +186,14 @@ const VirtualClassroom = (props) => {
                     <VideoBoxContainer>
                         {
                         localStream &&
-                        <VideoDisplay stream={localStream} showControls={true} {...defaultVideoProps} />
+                        <VideoDisplay localStream={localStream} showControls={true} {...defaultVideoProps} />
                         }
                         {
                          peers &&
                          Object.keys(peers).map((peerId, key) => {
-                            const peer = peers[peerId]
+                            const peer = peers[peerId]['peer'];
                              return (
-                                <VideoDisplay key={key} stream={peer['stream']} showControls={false} {...defaultVideoProps} />
+                            peer && <VideoDisplay key={key} peer={peer} showControls={false} {...defaultVideoProps} />
                              )
                          })
                         }

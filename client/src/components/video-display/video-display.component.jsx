@@ -6,11 +6,19 @@ import CamOnIcon from '@material-ui/icons/Videocam';
 import CamOffIcon from '@material-ui/icons/VideocamOff';
 import ShareScreenIcon from '@material-ui/icons/ScreenShare';
 
-const VideoDisplay = ({ stream, showControls, getDisplay, setAudioLocal, micState, setVideoLocal, camState }) =>{
+const VideoDisplay = ({ localStream, peer, showControls, getDisplay, setAudioLocal, micState, setVideoLocal, camState }) =>{
     const videoRef = useRef()
     useEffect(() => {
-       if(stream && videoRef) videoRef.current.srcObject = stream;
-    }, [stream]);
+       if(localStream && videoRef) {
+        videoRef.current.srcObject = localStream;
+        return;
+       }
+       if(peer && videoRef) {
+        peer.on('stream', remoteStream => {
+            videoRef.current.srcObject = remoteStream;
+        });
+       }
+    }, [localStream, peer]);
 
     return (
         <div className='local-video-wrapper'>
