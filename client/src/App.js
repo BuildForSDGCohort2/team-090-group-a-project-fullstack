@@ -19,6 +19,7 @@ const App = ({ currentUser }) => {
 			<Switch>
 				<Route exact path='/' component={LandingPage} />
 				<Route path='/classroom/:id' render={() => !currentUser ? (<Redirect to='/' />) : (<ClassroomPage />)} />
+				<Route path='/classroom/join/:id' render={() => !currentUser ? (<Redirect to='/' />) : (<ClassroomPage />)} />
 			</Switch>
 		</div>
 	);

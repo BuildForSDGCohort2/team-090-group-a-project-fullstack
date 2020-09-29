@@ -4,11 +4,13 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const compression = require('compression');
 const enforce = require('express-sslify');
+const socketIO = require('socket.io');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const http = require('http').createServer(app);
 
 app.use(compression());
 app.use(bodyParser.json());
@@ -24,9 +26,22 @@ if(process.env.NODE_ENV === 'production') {
     });
 }
 
-app.listen(port, error => {
+http.listen(port, error => {
     if(error) throw error;
     console.log('Server running on port ' + port);
+});
+
+const io = socketIO.listen(http);
+io.on('connection', function (socket) {
+    socket.on('join', function ({ classroomId, currentUserId}) {
+        console.log({currentUserId});
+        socket.join(classroomId);
+        io.to(classroomId).emit('new-peer', currentUserId);  
+    });
+    socket.on('signal', (data) => {
+        console.log(data)
+        io.to(data.classroomId).emit('desc', data);        
+    });
 });
 
 app.get('/service-worker.js', (req, res) => {

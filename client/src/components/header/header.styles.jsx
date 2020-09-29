@@ -34,10 +34,6 @@ export const StyledMenuItem = styled(MenuItem)`
 
 `;
 
-export const LogoContainer = styled.div`
-  cursor: pointer;
-`;
-
 export const MenuContainer = styled.div`
     height: 100%;
     width: 20px;
