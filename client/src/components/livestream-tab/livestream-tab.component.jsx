@@ -9,7 +9,7 @@ import LivestreamParticipants from '../livestream-participants/livestream-partic
 
 import { LivestreamTabContainer } from './livestream-tab.styles'
 
-const LivestreamTab = () => {
+const LivestreamTab = (props) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -39,7 +39,7 @@ const LivestreamTab = () => {
         <Tab label="Comments" />
     </Tabs>
       <TabPanel index={0} value={value}>
-        <LivestreamParticipants />
+        <LivestreamParticipants { ...props } />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <LivestreamComments /> 

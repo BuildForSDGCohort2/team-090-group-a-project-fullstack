@@ -4,6 +4,8 @@ import CustomAppBar from '../custom-app-bar/custom-app-bar.component';
 import LivestreamTab from '../livestream-tab/livestream-tab.component';
 import VideoDisplay from '../video-display/video-display.component';
 
+import Button from '@material-ui/core/Button';
+
 import io from 'socket.io-client';
 import { getDisplayStream, VideoCall } from './virtual-classroom.utils';
 
@@ -181,6 +183,14 @@ const VirtualClassroom = (props) => {
         camState: camState
     });
 
+    const liveStreamTabProps = ({
+      peers:peers,
+      localStream:localStream,
+      classroomOwnerId:classroomOwnerId,
+      currentUserId: currentUserId,
+      ...defaultVideoProps
+    });
+
     return(
         <VirtualClassroomContainer>
             <CustomAppBar {...props} />
@@ -188,8 +198,10 @@ const VirtualClassroom = (props) => {
                 <LeftContentContainer>
                     <VideoBoxContainer>
                         {
-                        localStream &&
+                        localStream ?
                         <VideoDisplay localStream={localStream} showControls={true} {...defaultVideoProps} />
+                        :
+                        <div className="loading"></div>
                         }
                         {
                          peers &&
@@ -202,14 +214,19 @@ const VirtualClassroom = (props) => {
                         }
                     </VideoBoxContainer>
                 </LeftContentContainer>
-                <RightContentContainer>
-                    {
-                        enterClassroom ?
-                        <LivestreamTab /> :
-                        currentUserId && classroomId ? <button onClick={joinLiveStream}>Enter classroom</button>
-                        : <div>An error occoured</div>
-                    }
+                {
+                  <RightContentContainer>
+                  {
+                      enterClassroom ?
+                      <LivestreamTab {...liveStreamTabProps} /> :
+                      currentUserId && classroomId ? 
+                      <div className="enter-btn-container">
+                        <Button className="enter-btn" onClick={joinLiveStream}>Enter classroom</Button>
+                      </div>
+                      : <div>An error occoured</div>
+                  }
                 </RightContentContainer>
+                }
             </VirtualClassroomContents>
         </VirtualClassroomContainer>
     );
