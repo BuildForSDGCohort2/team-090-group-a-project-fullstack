@@ -6,7 +6,7 @@ export const VideoDisplayContainer = styled.div`
     width: 100%;
     height: 100%;
     display: block;
-    background-color: red;
+    background-color: white;
     video {
         width: 100%;
         height:100%;
