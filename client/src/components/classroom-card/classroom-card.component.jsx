@@ -22,7 +22,7 @@ const ClassroomCard = ({ classroom, ...otherProps }) => {
         <CardContainer {...otherProps} variant="outlined">
             <CardHeader
                 avatar={
-                    <Avatar aria-label="recipe">
+                    <Avatar className={'avatar'} aria-label="recipe">
                         {classroom.id[0]}
                     </Avatar>
                 }

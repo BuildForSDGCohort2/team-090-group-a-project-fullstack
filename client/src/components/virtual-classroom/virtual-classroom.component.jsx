@@ -198,13 +198,23 @@ const VirtualClassroom = (props) => {
                 <LeftContentContainer>
                     <VideoBoxContainer>
                         {
+                        Object.keys(peers).length ?
+                        Object.keys(peers)
+                        .filter(peerId => peerId === classroomOwnerId)
+                        .map((peerId, key) => {
+                          const peer = peers[peerId]['peer'];
+                           return (
+                          peer && <VideoDisplay key={key} peer={peer} showControls={false} {...defaultVideoProps} />
+                           )
+                       })
+                        :
                         localStream ?
                         <VideoDisplay localStream={localStream} showControls={true} {...defaultVideoProps} />
                         :
                         <div className="loading"></div>
                         }
                         {
-                         peers &&
+                         Object.keys(peers).length &&
                          Object.keys(peers).map((peerId, key) => {
                             const peer = peers[peerId]['peer'];
                              return (

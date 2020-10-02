@@ -9,8 +9,13 @@ import { selectActiveClassroom, selectIsJoiningClassroom } from '../../redux/cla
 
 import PageLoader from '../../components/page-loader/page-loader.component';
 import EmptyRecord from '../../components/empty-record/empty-record.component';
+import AboutClassroom from '../../components/about-classroom/about-classroom.component';
+import ClassroomTab from '../../components/classroom-tab/classroom-tab.component';
+import Announcements from '../../components/announcements/announcements.component';
 
-import { ClassroomPageContainer } from './classroom.styles';
+
+
+import { ClassroomPageContainer, ClassroomSectionContainer } from './classroom.styles';
 
 function ClassroomPage ({ match: { params: { id: classroomId } }, joinClassroomStart, currentUser, isJoiningClassroom, activeClassroom }) {
     useEffect(() => {
@@ -21,7 +26,19 @@ function ClassroomPage ({ match: { params: { id: classroomId } }, joinClassroomS
     <ClassroomPageContainer>
         {
             isJoiningClassroom ? <PageLoader /> :
-            activeClassroom ? <div>{activeClassroom.classroomName}</div>: <EmptyRecord message={'Error finding this classroom'} />
+            activeClassroom ? 
+            <ClassroomSectionContainer>
+               <div className="classroom-left">
+                 <AboutClassroom activeClassroom={activeClassroom} />
+                </div>
+                <div className="classroom-middle">
+                    <Announcements />
+                </div>
+                <div className="classroom-right">
+                    <ClassroomTab />
+                </div>  
+            </ClassroomSectionContainer>
+            : <EmptyRecord message={'Error finding this classroom'} />
         }
     </ClassroomPageContainer>
     );
