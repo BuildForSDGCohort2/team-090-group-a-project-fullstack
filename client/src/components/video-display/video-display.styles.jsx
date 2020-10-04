@@ -17,7 +17,7 @@ export const VideoDisplayContainer = styled.div`
     }
     .video-container {
         width: 100%;
-        height: 100%;
+        height: auto;
         display: flex;
         align-self: center;
     }
