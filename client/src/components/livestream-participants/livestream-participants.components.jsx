@@ -15,6 +15,32 @@ const LivestreamParticipants = ({ peers, localStream, currentUserId, classroomOw
         }
 
         {
+            <div className="video-display-wrapper">
+            <VideoDisplay localStream={localStream} showControls={false} {...defaultVideoProps} />
+            </div>
+        }
+        {
+            <div className="video-display-wrapper">
+            <VideoDisplay localStream={localStream} showControls={false} {...defaultVideoProps} />
+            </div>
+        }
+        {
+            <div className="video-display-wrapper">
+            <VideoDisplay localStream={localStream} showControls={false} {...defaultVideoProps} />
+            </div>
+        }
+        {
+            <div className="video-display-wrapper">
+            <VideoDisplay localStream={localStream} showControls={false} {...defaultVideoProps} />
+            </div>
+        }
+        {
+            <div className="video-display-wrapper">
+            <VideoDisplay localStream={localStream} showControls={false} {...defaultVideoProps} />
+            </div>
+        }
+
+        {
             peers &&
             Object.keys(peers).map((peerId, key) => {
             const peer = peers[peerId]['peer'];

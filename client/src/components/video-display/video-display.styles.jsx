@@ -2,30 +2,24 @@ import styled from 'styled-components';
 
 export const VideoDisplayContainer = styled.div`
     position: relative;
-    display: flex;
-    align-self: center;
-    width: 100%;
-    height: 100%;
     display: block;
     background-color: white;
     border: none;
     margin: 10px;
+    
 
     video {
         width: 100%;
-        height:100%;
+        height: auto;
     }
     .video-container {
         width: 100%;
-        height: auto;
         display: flex;
         align-self: center;
     }
 
     .controls-container {
-        position: absolute;
-        bottom: 0;
-        left: 0;
+        position: relative;
         width: 100%;
         background-color: white;
         border: none;
