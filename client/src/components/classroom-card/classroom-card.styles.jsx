@@ -11,4 +11,5 @@ export const CardContainer = styled(Card)`
 
 export const CardActionAreaContainer = styled(CardActionArea)`
     min-height: 200px;
+    min-width: 90vw;
 `;

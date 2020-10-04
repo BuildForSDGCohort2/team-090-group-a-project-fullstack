@@ -8,7 +8,7 @@ const ClassroomsGrid = ({ classrooms }) => (
     <Grid container spacing={3}>
         {
             classrooms.map((classroom, key) => (
-             <Grid item xs={4} key={key}>   
+             <Grid item sm={12} lg={4} key={key}>   
                 <ClassroomCard elevation={10} classroom={classroom} />
              </Grid>   
             ))

@@ -2,11 +2,15 @@ import styled from 'styled-components';
 
 export const VideoDisplayContainer = styled.div`
     position: relative;
+    display: flex;
     align-self: center;
     width: 100%;
     height: 100%;
     display: block;
     background-color: white;
+    border: none;
+    margin: 10px;
+
     video {
         width: 100%;
         height:100%;
@@ -24,6 +28,7 @@ export const VideoDisplayContainer = styled.div`
         left: 0;
         width: 100%;
         background-color: white;
+        border: none;
         
         .controls {
             display: flex;

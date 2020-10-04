@@ -13,7 +13,7 @@ import Logo from '../logo/logo.component';
 
 
 const CustomAppBar = ({ handleNavigateToHomepage, activeClassroom, toggleVirtualClassroom, virtualClassroom, handleClassroomMenuClick, handleUserMenuClick, currentUser }) => (
-    <AppBarContainer position="relative" elevation={1} color={'transparent'} >
+    <AppBarContainer position="fixed" elevation={1} color={'transparent'} >
         <Toolbar>
             <LogoContainer onClick={handleNavigateToHomepage}>
                 <Logo />

@@ -5,7 +5,7 @@ export const AuthenticationModalContainer = styled.div`
     top: 0;
     width: 100%;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.7);
 
     .box{
         position:  absolute;
@@ -19,6 +19,10 @@ export const AuthenticationModalContainer = styled.div`
         border: solid #fff 1px;
         text-align: center;
 
+        @media screen and (max-width: 800px) {
+            width: 90%;
+        }
+
         .backdrop-logo{
             padding: 0.5em;
             margin-top: 0;
@@ -29,7 +33,7 @@ export const AuthenticationModalContainer = styled.div`
 
         p{
             width: 80%;
-            font-size: 13px;
+            font-size: 20px;
             margin: auto;
         }
 
@@ -40,7 +44,6 @@ export const AuthenticationModalContainer = styled.div`
             border-radius: 5px;
             background-color: blue;
             color: white;
-            elevation: 4;
             padding: 10px;
             outline: none !important;
             cursor: pointer;
