@@ -5,11 +5,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
+    position: relative;
+    top: 0;
+    left: 0;
     height: 60px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     margin-bottom: 25px;
+    overflow: hidden;
 
     @media screen and (max-width: 800px) {
         height: 50px;

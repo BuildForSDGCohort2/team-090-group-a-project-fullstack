@@ -10,5 +10,9 @@ export const LogoContainer = styled.div`
 export const AppBarContainer = styled(AppBar)`
     .grow {
         flex-grow: 1;
-    }
+    };
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    max-width: 100vw;
 `

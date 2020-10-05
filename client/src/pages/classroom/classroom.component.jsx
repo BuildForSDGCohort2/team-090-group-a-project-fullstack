@@ -35,7 +35,7 @@ function ClassroomPage ({ match: { params: { id: classroomId } }, joinClassroomS
                     <Announcements />
                 </div>
                 <div className="classroom-right">
-                    <ClassroomTab />
+                    <ClassroomTab activeClassroom={activeClassroom} />
                 </div>  
             </ClassroomSectionContainer>
             : <EmptyRecord message={'Error finding this classroom'} />

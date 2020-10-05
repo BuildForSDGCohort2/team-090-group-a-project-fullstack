@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import CustomAppBar from '../custom-app-bar/custom-app-bar.component';
 import LivestreamTab from '../livestream-tab/livestream-tab.component';
-import VideoDisplay from '../video-display/video-display.component';
+import VideoBox from '../video-box/video-box.component';
 
 import Button from '@material-ui/core/Button';
 
@@ -11,7 +11,7 @@ import { getDisplayStream, VideoCall } from './virtual-classroom.utils';
 
 import { api } from '../../config';
 
-import { VirtualClassroomContainer, VirtualClassroomContents, LeftContentContainer, RightContentContainer, VideoBoxContainer } from './virtual-classroom.styles';
+import { VirtualClassroomContainer, VirtualClassroomContents, LeftContentContainer, RightContentContainer } from './virtual-classroom.styles';
 
 const VirtualClassroom = (props) => {
     const [localStream, setLocalStream] = useState();
@@ -196,33 +196,7 @@ const VirtualClassroom = (props) => {
             <CustomAppBar {...props} />
             <VirtualClassroomContents>
                 <LeftContentContainer>
-                    <VideoBoxContainer>
-                        {
-                        Object.keys(peers).length ?
-                        Object.keys(peers)
-                        .filter(peerId => peerId === classroomOwnerId)
-                        .map((peerId, key) => {
-                          const peer = peers[peerId]['peer'];
-                           return (
-                          peer && <VideoDisplay key={key} peer={peer} showControls={false} {...defaultVideoProps} />
-                           )
-                       })
-                        :
-                        localStream ?
-                        <VideoDisplay localStream={localStream} showControls={true} {...defaultVideoProps} />
-                        :
-                        <div className="loading"></div>
-                        }
-                        {
-                         Object.keys(peers).length &&
-                         Object.keys(peers).map((peerId, key) => {
-                            const peer = peers[peerId]['peer'];
-                             return (
-                            peer && <VideoDisplay key={key} peer={peer} showControls={false} {...defaultVideoProps} />
-                             )
-                         })
-                        }
-                    </VideoBoxContainer>
+                    <VideoBox {...liveStreamTabProps} />
                 </LeftContentContainer>
                 {
                   <RightContentContainer>
@@ -230,9 +204,15 @@ const VirtualClassroom = (props) => {
                       enterClassroom ?
                       <LivestreamTab {...liveStreamTabProps} /> :
                       currentUserId && classroomId ? 
-                      <div className="enter-btn-container">
-                        <Button className="enter-btn" onClick={joinLiveStream}>Enter classroom</Button>
+                      <div className="enter-classroom-container">
+                        <div className="hide-on-desktop"> 
+                          <VideoBox  {...liveStreamTabProps} /> 
+                        </div>
+                        <div className="enter-btn-container">
+                          <Button className="enter-btn" onClick={joinLiveStream}>Enter classroom</Button>
+                        </div>
                       </div>
+          
                       : <div>An error occoured</div>
                   }
                 </RightContentContainer>
