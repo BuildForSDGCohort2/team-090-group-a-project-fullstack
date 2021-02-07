@@ -8,6 +8,7 @@ export const LogoContainer = styled.div`
 
 
 export const AppBarContainer = styled(AppBar)`
+    background-color: white;
     .grow {
         flex-grow: 1;
     };

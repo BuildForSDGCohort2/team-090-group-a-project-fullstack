@@ -13,7 +13,8 @@ export const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 25px;
-    overflow: hidden;
+    overflow-x: hidden;
+    z-index: 2;
 
     @media screen and (max-width: 800px) {
         height: 50px;
